@@ -25,14 +25,21 @@ exports.findById = async (conn, id) => {
 }
 
 exports.create = async (conn, { nama }) => {
-	const QUERY = 'INSERT INTO posisi (nama) VALUES (?)'
-
+	const QUERY_INSERT = 'INSERT INTO posisi (nama) VALUES (?)'
+	const QUERY_SELECT = `SELECT * FROM posisi WHERE nama = ? LIMIT 1`
 	try {
-		const [posisi, err] = await conn.execute(QUERY, [nama])
+		await conn.beginTransaction()
+		
+		const [[isExist]] = await conn.query(QUERY_SELECT, [nama])
+		if(isExist) throw new Error('nama posisi telah digunakan, tolong gunakan nama lain')
+
+		const [res, err] = await conn.execute(QUERY_INSERT, [nama])
 		if(err) throw err
 
-		return [posisi, null]
+		await conn.commit()
+		return [res, null]
 	} catch(error) {
+		await conn.rollback()
 		return [null, error]
 	}
 }
