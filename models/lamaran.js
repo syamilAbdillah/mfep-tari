@@ -15,14 +15,14 @@ exports.status = status
 
 exports.create = async (conn, { loker_id, kandidat_id }) => {
 	const SELECT_QUERY = `SELECT * FROM lamaran WHERE loker_id = ? AND kandidat_id = ?`
-	const INSERT_QUERY = `INSERT INTO lamaran (loker_id, kandidat_id, status) VALUES (?, ?, ?)`
+	const INSERT_QUERY = `INSERT INTO lamaran (loker_id, kandidat_id, status, tanggal) VALUES (?, ?, ?, ?)`
 
 	try {
 		await conn.beginTransaction()
 
 		const [[isExist], fields] = await conn.query(SELECT_QUERY, [loker_id, kandidat_id])
 		if(isExist) throw new Error('anda telah membuat lamaran untuk loker tsb')
-		const [res, meta] = await conn.execute(INSERT_QUERY, [loker_id, kandidat_id, status.MENUNGGU])
+		const [res, meta] = await conn.execute(INSERT_QUERY, [loker_id, kandidat_id, status.MENUNGGU, new Date()])
 
 		await conn.commit()
 		return [res, null]	
