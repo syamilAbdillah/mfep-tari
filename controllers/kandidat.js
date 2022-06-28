@@ -4,6 +4,7 @@ const upload = require('./upload')
 const kandidat = require('../models/kandidat')
 const akun = require('../models/akun')
 const printPdf = require('../utils/printPdf')
+const uploadFile = require('../utils/uploadFile')
 const emailValidation = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 const telponValidation = new RegExp(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/)
 
@@ -47,17 +48,21 @@ router.post('/new', upload.single('cv'), async (req, res, next) => {
 	const salt = await bcrypt.genSalt(10)
 	const hashed = await bcrypt.hash(req.body.password, salt)
 
-	const [result, err] = await kandidat.create(conn, {
-		...req.body, 
-		password: hashed, 
-		cv: `/uploads/${req.file.filename}`,
-	})
-	
-	if(err) {
-		return next(err)
-	}
+	uploadFile(req.file.buffer)
+		.then(async result => {
+			const [_, err] = await kandidat.create(conn, {
+				...req.body, 
+				password: hashed, 
+				cv: result.secure_url,
+			})
+			
+			if(err) throw err
 
-	res.redirect('/dashboard-admin/kandidat')
+			res.redirect('/dashboard-admin/kandidat')
+		})
+		.catch(error => {
+			next(error)
+		})
 })
 
 router.get('/edit/:id', async (req, res, next) => {
@@ -119,16 +124,18 @@ router.post('/edit/:id/reset-password', async (req, res, next) => {
 router.post('/edit/:id/update-cv', upload.single('cv'), async (req, res, next) => {
 	const conn = req.app.get('connection')
 	
-	const [_, err] = await kandidat.updateCv(conn, {
-		akun_id: req.params.id,
-		cv: `/uploads/${req.file.filename}`,
-	})
+	uploadFile(req.file.buffer)
+		.then(async result => {
+			const [_, err] = await kandidat.updateCv(conn, {
+				akun_id: req.params.id,
+				cv: result.secure_url,
+			})
 
-	if (err) {
-		return next(err)
-	}
+			if(err) throw err
 
-	res.redirect('/dashboard-admin/kandidat')
+			res.redirect('/dashboard-admin/kandidat')
+		})
+		.catch(error => next(error))
 })
 
 router.post('/delete/:id', async (req, res, next) => {

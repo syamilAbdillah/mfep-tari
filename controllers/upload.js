@@ -1,22 +1,6 @@
 const multer = require('multer')
 
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		const dirs = __dirname.split('/')
-		dirs.pop()
-		dirs.push('public')
-		dirs.push('uploads')
-		const dest = dirs.join('/')
-
-		cb(null, dest)
-	},
-	filename: (req, file, cb) => {
-		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-		const ogname = file.originalname.split('.')
-		const ext = ogname[ogname.length - 1]
-		cb(null, uniqueSuffix + '.' + ext)
-	},
-})
+const storage = multer.memoryStorage()
 
 const fileFilter = (req, file, cb) => {
 	if(file.mimetype != 'application/pdf') {
@@ -30,6 +14,6 @@ const limits = {
 	files: 1,
 }
 
-const upload = multer({ storage, fileFilter, limits })
+const upload = multer({ fileFilter, limits, storage })
 
 module.exports = upload

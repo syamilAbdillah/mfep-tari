@@ -3,6 +3,7 @@ const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const formatDate = require('../utils/formatDate')
 const upload = require('./upload')
+const uploadFile = require('../utils/uploadFile')
 const { guard, loginRequired, handleResetPassword } = require('./middleware')
 
 const loker = require('../models/loker')
@@ -98,18 +99,20 @@ router.post('/register', upload.single('cv'), async (req, res, next) => {
 	const salt = await bcrypt.genSalt(10)
 	const hashed = await bcrypt.hash(req.body.password, salt)
 
-	const [result, err] = await kandidat.create(conn, {
-		...req.body, 
-		password: hashed, 
-		cv: `/uploads/${req.file.filename}`,
-	})
-	
-	if(err) {
-		return next(err)
-	}
+	uploadFile(req.file.buffer)
+		.then(async result => {
+			const [data, err] = await kandidat.create(conn, {
+				...req.body, 
+				password: hashed, 
+				cv: result.secure_url,
+			})
 
-	req.session = result
-	res.redirect('/')
+			if(err) throw err
+
+			req.session = data
+			res.redirect('/')
+		})
+		.catch(error => next(error))
 })
 /*
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -145,29 +148,20 @@ router.get('/update-cv', async (req, res, next) => {
 router.post('/update-cv',loginRequired, guard('kandidat'), upload.single('cv'), async (req, res, next) => {
 	const conn = req.app.get('connection')
 	
-	const [data, err] = await kandidat.findById(conn, req.session.id)
-	if (err) {
-		return next(err)
-	}
-	
-	const dirs = __dirname.split('/')
-	dirs.pop()
-	dirs.push('public')
-	const filepath = dirs.join('/') + data.cv
-	data.cv = `/uploads/${req.file.filename}`
+	uploadFile(req.file.buffer)
+		.then(async result => {
+			const [_, err] = await kandidat.updateCv(conn, {
+				akun_id: req.session.id,
+				cv: result.secure_url,
+			})
 
-	const [_, err2] = await kandidat.updateCv(conn, data)
-	if (err2) {
-		return next(err2)
-	}
+			if(err) throw err
 
-	fs.unlink(filepath, err => {
-		if(err) {
-			return next(err)
-		}
-		
-		res.redirect('/profile')
-	})
+			res.redirect('/profile') 
+		})
+		.catch(error => {
+			next(error)
+		})
 })
 /*
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||

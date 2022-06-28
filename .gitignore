@@ -2,3 +2,4 @@ node_modules/
 sipp_mfep.sql
 mfep_tari.drawio
 public/uploads/
+.env

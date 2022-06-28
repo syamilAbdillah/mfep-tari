@@ -1,3 +1,4 @@
+require('dotenv').config()
 const path = require('path')
 const mysql = require('mysql2/promise')
 const express = require('express')
@@ -48,8 +49,8 @@ async function main(){
     app.use('/', controllers)
 
 	app.use((err, req, res, next) => {
+		console.log({err})
 		res.cookie('error-message', err.message, {httpOnly: true})
-
 		res.redirect(req.originalUrl)
 	})
 
