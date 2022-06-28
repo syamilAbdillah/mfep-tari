@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/icons.css">
+    <script defer src="/alpine.js"></script>
+    <title><%= title  %></title>
+</head>
+<body class="p-4">
+    <h3 class="title is-4 mb-8 is-center">
+        PT. EKA BOGA PRATAMA
+    </h3>
+
+	<h3 class="subtitle is-6 mb-4 is-center"><%= title %></h3>
+    <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nama Lengkap</th>
+                <th>Username</th>
+                <th>No. Telpon</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+            	let no = 1
+
+            	for(kandidat of data) {
+            %>
+                <tr class="hover">
+                    <td><%= no++ %></td> 
+                    <td><%= kandidat.nama %></td>
+                    <td><%= kandidat.username %></td>
+                    <td><%= kandidat.telpon %></td>
+                    <td><%= kandidat.email %></td>
+                </tr>
+			<%	} %>
+        </tbody>
+    </table>
+	<div class="border rounded-lg">
+    </div>
+</body>
+</html>

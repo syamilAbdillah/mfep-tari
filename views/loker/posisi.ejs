@@ -1,0 +1,73 @@
+<%- include('../partials/dashboard-open', {title: 'loker | sistem penerimaan pegawai'}) %>
+
+<div class="mockup-window bg-base-100 mb-8">
+	<div class="p-4 bg-base-100">
+		<a href="/dashboard-admin/loker" class="btn btn-ghost mb-4 text-secondary">
+			<i class="ph-arrow-fat-left mr-2"></i>
+			kembali
+		</a>
+
+		<h1 class="mb-4 font-thin font-mono"><span class="text-error">**</span>daftar periode loker untuk posisi <span class="font-sans font-bold"><%= posisi.nama %></span></h1>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>dibuka</th>
+	                    <th>ditutup</th>
+	                    <th>kuota</th>
+	                    <th>status</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <%
+	                	let no = 1
+
+	                	for(let loker of data) {
+	                %>
+
+                        <tr class="hover">
+                            <th><%= no++ %></th> 
+                            <td>
+                            	<span class="badge badge-lg badge-secondary">
+	                            	<%= formatDate(loker.dibuka, ' / ') %>
+                            	</span>
+                           	</td> 
+                            <td>
+                            	<span class="badge badge-lg badge-secondary">
+	                            	<%= formatDate(loker.ditutup, ' / ') %>
+                            	</span>
+                           	</td>
+                            <td><%= loker.kuota %></td>
+                            <td>
+                            	<% if(new Date(loker.ditutup).getTime() > Date.now()) { %>
+	                            	<span class="badge badge-lg badge-primary">masih dibuka</span>
+                            	<% } else { %>
+	                            	<span class="badge badge-lg badge-error">telah ditutup</span>
+                            	<% } %>
+                            </td>
+                            <td>
+                                <a href="/dashboard-admin/loker/<%= loker.id %>" class="btn btn-secondary mr-2">
+                                	detil
+                                </a>
+                                <a href="/dashboard-admin/loker/<%= loker.id %>/edit" class="btn btn-warning">
+                                	edit
+                                </a>
+                                <form class="inline" method="post" action="/dashboard-admin/loker/<%= loker.id %>/delete">
+                                	<input type="hidden" name="_method" value="DELETE">
+                                	<button class="btn btn-error" type="submit">hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+	                	<% if(!loker.ditutup) { %>
+	                	<% } %>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+</div>
+
+<%- include('../partials/dashboard-close', {active: 'loker'}) %>

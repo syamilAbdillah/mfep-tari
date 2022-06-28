@@ -1,0 +1,42 @@
+<%- include('partials/dashboard-open', {title: 'home | sistem penerimaan pegawai'}) %>
+
+<div class="grid gap-4 lg:grid-cols-2 grid-rows-2">
+	<div class="card bg-base-100">
+		<div class="card-body text-center">
+			<h2 class="card-title">Selamat Datang, <%= locals.user.username %></h2>
+			<div class="card-actions">
+				<a href="/dashboard-admin/reset-password" class="btn btn-warning">Reset Password</a>
+
+                <form class="inline" action="/logout" method="get">
+                    <button type="submit" class="btn btn-error">
+                        <i class="ph-sign-out-bold mr-2"></i>
+                        logout
+                    </button>
+                </form>
+			</div>
+		</div>
+	</div>
+	<div class="stats shadow">  
+		<div class="stat">
+			<div class="stat-title">Total Posisi</div>
+			<div class="stat-value"><%= totalPosisi %></div>
+			<div class="stat-desc">total posisi yang tersedia</div>
+		</div>
+	</div>
+	<div class="stats shadow">  
+		<div class="stat">
+			<div class="stat-title">Total Loker</div>
+			<div class="stat-value"><%= totalLoker %></div>
+			<div class="stat-desc">lowongan pekerjaan yang pernah dibuat</div>
+		</div>
+	</div>
+	<div class="stats shadow">  
+		<div class="stat">
+			<div class="stat-title">Total Kandidat</div>
+			<div class="stat-value"><%= totalKandidat %></div>
+			<div class="stat-desc">para pelamar yang telah melakuka registrasi</div>
+		</div>
+	</div>
+</div>
+
+<%- include('partials/dashboard-close', {active: 'home'}) %>

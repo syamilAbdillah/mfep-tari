@@ -1,0 +1,53 @@
+<%- include('partials/public-open', {title: 'sistem penerimaan pegawai'}) %>
+
+	<div class="text-2xl text-center my-6">DAFTAR LOWONGAN PEKERJAAN</div>
+
+	<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+		<% for(let loker of listLoker) { -%>
+			<div class="card shadow-xl bg-base-100">
+				<div class="card-body">
+					<h2 class="card-title"> <%= loker.nama %> </h2>
+					<div class="my-3">
+						<span class="font-thin font-mono text-gray-800">Periode :</span>
+						<p>
+							<span class="badge "><%= formatDate(loker.dibuka) %></span> - <span class="badge "><%= formatDate(loker.ditutup) %></span>
+						</p>
+					</div>
+					<% const open = (new Date(loker.ditutup) > Date.now()) && (loker.kuota > loker.total_diterima)  %>
+					<div class="my-3">
+						<p>
+							<span class="font-thin font-mono text-gray-800">Status :</span>
+							<% if(open) {%>
+								<span class="badge badge-primary">Masih Dibuka</span>
+							<% } else { %>
+								<span class="badge badge-error">Telah Ditutup</span>
+							<% } %>
+						</p>
+					</div>
+					<% if(locals.user && (locals.user.role == 'kandidat')) { -%>
+						<div class="card-actions justify-end mt-3">
+							<% if (open && (loker.status == null)) { -%>
+								<form action="/<%= loker.id %>" method="post">
+									<button type="submit" class="btn btn-primary">lamar</button>
+								</form>
+							<% } -%>
+
+							<% if (loker.status == status.MENUNGGU) { -%>
+								<span class="badge badge-lg badge-secondary"><%= loker.status %> hasil lamaran</span>
+							<% } -%>
+
+							<% if (loker.status == status.DITERIMA) { -%>
+								<span class="badge badge-lg badge-primary">lamaran anda <%= loker.status %></span>
+							<% } -%>
+
+							<% if (loker.status == status.DITOLAK) { -%>
+								<span class="badge badge-lg badge-error">lamaran anda <%= loker.status %></span>
+							<% } -%>
+						</div>
+					<% } -%>
+				</div>
+			</div>
+		<% } -%>
+	</div>
+
+<%- include('partials/public-close') %>

@@ -1,0 +1,48 @@
+        </div>
+    </div> 
+    <div class="drawer-side">
+        <label for="my-drawer-2" class="drawer-overlay"></label>
+
+        <ul class="menu p-4 overflow-y-auto w-72 bg-primary-focus text-primary-content">
+            <!-- Sidebar content here -->
+            <li>
+                <a href="/dashboard-admin" class="<%= active == 'home' ? 'active': '' %>">
+                    <i class="ph-house mr-2"></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard-admin/posisi" class="<%= active == 'posisi' ? 'active': '' %>">
+                    <i class="ph-briefcase mr-2"></i>
+                    Posisi
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard-admin/admin" class="<%= active == 'admin' ? 'active': '' %>">
+                    <i class="ph-detective mr-2"></i>
+                    Admin
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard-admin/kandidat" class="<%= active == 'kandidat' ? 'active': '' %>">
+                    <i class="ph-detective mr-2"></i>
+                    Kandidat
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard-admin/kriteria" class="<%= active == 'kriteria' ? 'active': '' %>">
+                    <i class="ph-scales mr-2"></i>
+                    Kriteria
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard-admin/loker" class="<%= active == 'loker' ? 'active': '' %>">
+                    <i class="ph-briefcase mr-2"></i>
+                    Loker
+                </a>
+            </li>
+        </ul>
+
+    </div>
+</div>
+<%- include('footer') %>

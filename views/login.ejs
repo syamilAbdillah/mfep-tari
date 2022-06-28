@@ -1,0 +1,23 @@
+<%- include('partials/public-open', { title: 'login | sistem penerimaan pegawai' }) %>
+
+<div class="h-full flex justify-center items-center">
+	<div class="w-96 py-12 mt-8 px-4 rounded bg-base-100">
+		<form method="post">
+			<div class="form-control w-full mb-12">
+				<label for="username" class="label">Username</label>
+				<input id="username" type="text" class="input input-bordered" name="username">
+			</div>
+
+
+			<div class="form-control w-full mb-12">
+				<label for="password" class="label">Password</label>
+				<input id="password" type="password" class="input input-bordered" name="password">
+			</div>
+
+			<button class="btn btn-primary">login</button>
+		</form>
+	</div>
+</div>
+
+
+<%- include('partials/public-close') %>

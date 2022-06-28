@@ -1,0 +1,101 @@
+<%- include('../partials/dashboard-open', {title: 'loker | sistem penerimaan pegawai'}) %>
+
+<div class="p-4 bg-base-100 rounded shadow mb-6">
+	<h1 class="text-2xl font-thin text-center mb-4">Daftar Pelamar</h1>
+	<div class="flex justify-between items-center">
+		<a href="/dashboard-admin/loker" class="btn btn-ghost text-secondary">
+			<i class="ph-arrow-fat-left mr-2"></i>
+			kembali
+		</a>
+		<span class="badge">Total Diterima: <%= totalDiterima %>/<%= kuota %></span>
+		<a href="/dashboard-admin/loker/<%= loker_id %>/laporan" class="btn btn-secondary">Cetak Laporan</a>
+	</div>
+</div>
+
+<% for(let pelamar of data) { -%>
+	<div class="p-6 bg-base-100 rounded shadow mb-4" x-data="{ toggle: false }">
+		<div class="flex justify-between items-center mb-6">
+			<div>
+				<h2 class="text-xl mb-4"><%= pelamar.nama %></h2>
+				<span class="badge">
+					<%= formatDate(pelamar.tanggal) %>
+				</span>
+			</div>
+			
+			<button x-on:click="toggle = !toggle" class="btn btn-circle btn-ghost">
+				<i x-show="!toggle" class="ph-caret-down-bold text-2xl"></i>
+				<i x-show="toggle" class="ph-caret-up-bold text-2xl"></i>
+			</button>
+		</div>
+
+		<div x-transition x-show="toggle" class="overflow-x-auto border rounded-lg mb-6">
+			<table class="table w-full">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>nama kriteria</th>
+						<th colspan="3">bobot</th>
+						<th colspan="3">nilai</th>
+						<th>...</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% let j = 1 %>
+					<% for(let eval of pelamar.list_kriteria) { -%>
+						<tr>
+							<th><%= j++ %></th>
+							<td><%= eval.nama %></td>
+							<td><%= eval.bobot %> / <%= pelamar.total_bobot %></td>
+							<td> -> </td>
+							<td><%= formatFloat(eval.bobot, pelamar.total_bobot) %></td>
+							<td><%= eval.nilai == null ? 0: eval.nilai %></td>
+							<td> -> </td>
+							<td><%= formatFloat(eval.nilai * eval.bobot, pelamar.total_bobot) %></td>
+							<td>
+								<% if (eval.nilai == null) { -%>
+									<a href="/dashboard-admin/loker/<%= loker_id %>/kandidat/<%= pelamar.id %>/kriteria/<%= eval.id %>/new" class="btn btn-primary">masukan nilai</a>
+								<% } else { -%>
+									<a href="/dashboard-admin/loker/<%= loker_id %>/kandidat/<%= pelamar.id %>/kriteria/<%= eval.id %>/edit" class="btn btn-warning">
+										edit
+									</a>
+									<form class="inline" method="post" action="/dashboard-admin/loker/<%= loker_id %>/kandidat/<%= pelamar.id %>/kriteria/<%= eval.id %>/delete">
+										<input type="hidden" name="_method" value="DELETE">
+										<button type="submit" class="btn btn-error">
+											hapus
+										</button>
+									</form>
+								<% } -%>
+							</td>
+						</tr>
+					<% } -%>
+				</tbody>
+			</table>
+		</div>
+		<div class="mb-4">
+			<% if(!pelamar.is_completed) { -%>
+				<span class="badge badge-error badge-lg">nilai evaluasi belum lengkap</span>
+			<% } else { -%>
+				<span class="text-xl font-mono font-bold">Total Nilai: <%= formatFloat(pelamar.total_nilai, 1) %></span>
+			<% } -%>
+		</div>
+		<div class="flex justify-between items-center">
+			<a href="<%= pelamar.cv %>" class="btn btn-secondary">cv pelamar</a>
+			<% if (pelamar.is_completed) { -%>
+				<form method="post">
+					<input type="hidden" name="kandidat_id" value="<%= pelamar.id %>">
+					<% if(pelamar.status != status.DITERIMA && totalDiterima < kuota) { -%>
+						<input type="hidden" name="status" value="<%= status.DITERIMA %>">
+						<button type="submit" class="btn btn-primary">terima pelamar</button>
+					<% } -%>
+
+					<% if(pelamar.status == status.DITERIMA) { -%>
+						<input type="hidden" name="status" value="<%= status.MENUNGGU %>">
+						<button type="submit" class="btn btn-error">batal terima</button>
+					<% } -%>
+				</form>
+			<% } -%>
+		</div>
+	</div>
+<% } -%>
+
+<%- include('../partials/dashboard-close', {active: 'loker'}) %>

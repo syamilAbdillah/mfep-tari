@@ -1,0 +1,51 @@
+<%- include('../partials/dashboard-open', {title: 'kriteria | sistem penerimaan pegawai'}) %>
+
+<div class="mockup-window bg-base-100">
+	<div class="p-4 bg-base-100">
+		<a href="/dashboard-admin/kriteria" class="btn btn-ghost mb-4 text-secondary">
+			<i class="ph-arrow-fat-left mr-2"></i>
+			kembali
+		</a>
+
+		<form method="post">
+			<div class="form-control w-full mb-12">
+				<label class="label">Posisi</label>
+
+				<% if(posisi) {%>
+					<% for(p of listPosisi) {%>
+						<% if(p.id == posisi) {%>
+							<input type="text" class="input input-bordered" value="<%= p.nama %>" disabled>
+							<input type="hidden" value="<%= p.id %>" name="posisi_id">
+						<% } %>
+					<% } %>
+				<% } else {%>
+					<select id="input-posisi" class="select input-bordered" name="posisi_id">
+					<% for(p of listPosisi) {%>
+						<option value="<%= p.id %>"><%= p.nama %></option>
+					<% } %>
+					</select>
+				<% } %>
+			</div>
+			
+			<div class="form-control w-full mb-12">
+				<label for="nama" class="label">Nama Kriteria</label>
+				<input id="nama" type="text" class="input input-bordered" name="nama">
+			</div>
+			
+
+			<div class="form-control w-full mb-12">
+				<label for="bobot" class="label">Bobot</label>
+				<input id="bobot" type="number" class="input input-bordered" name="bobot">
+			</div>
+
+
+
+			<button class="btn btn-primary">
+				<i class="ph-floppy-disk mr-2 text-xl"></i>
+				simpan
+			</button>
+		</form>
+
+	</div>
+</div>
+<%- include('../partials/dashboard-close', {active: 'kriteria'}) %>

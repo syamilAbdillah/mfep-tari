@@ -1,0 +1,38 @@
+<%- include('../partials/dashboard-open', {title: 'posisi | sistem penerimaan pegawai'}) %>
+
+<div class="mockup-window bg-base-100">
+	<div class="p-4 bg-base-100">
+
+		<a href="/dashboard-admin/posisi/new" class="btn btn-secondary mb-4">tambah posisi</a>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>nama</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <%
+	                	let no = 1
+
+	                	for(posisi of listPosisi) {
+	                %>
+                        <tr class="hover">
+                            <th><%= no++ %></th> 
+                            <td><%= posisi.nama %></td>
+                            <td>
+                                <a href="/dashboard-admin/posisi/edit/<%= posisi.id %>" class="btn btn-warning mr-2">ubah</a>
+                                <a href="/dashboard-admin/posisi/delete/<%= posisi.id %>" class="btn btn-error mr-2">hapus</a>
+                                
+                            </td>
+                        </tr>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+</div>
+<%- include('../partials/dashboard-close', {active: 'posisi'}) %>

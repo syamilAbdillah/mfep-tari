@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="/icons.css">
+    <script defer src="/alpine.js"></script>
+    <title><%= title  %></title>
+    <style>
+        table.meta-data td {
+            padding: .125rem .5rem;
+        }
+
+        table.meta-data th {
+            padding: .125rem .5rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <% for(let pelamar of data) { -%>
+        <div style="page-break-after: always;" class="py-6">
+            <h3 class="title is-4 is-center">
+                PT. EKA BOGA PRATAMA
+            </h3>
+
+            <h6 class="subtitle is-6 mb-6 is-center"><%= title %></h6>
+            <table class="mb-4 meta-data">
+                <tr>
+                    <th>Nama Lengkap</th>
+                    <td>:</td>
+                    <td><%= pelamar.nama %></td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>:</td>
+                    <td><%= pelamar.email %></td>
+                </tr>
+                <tr>
+                    <th>Telpon</th>
+                    <td>:</td>
+                    <td><%= pelamar.telpon %></td>
+                </tr>
+                <tr>
+                    <th>Melamar pada</th>
+                    <td>:</td>
+                    <td><%= formatDate(pelamar.tanggal, '-') %></td>
+                </tr>
+            </table>
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Kriteria</th>
+                        <th>Nilai</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
+                    	let no = 1
+
+                    	for(let eval of pelamar.list_kriteria) {
+                    %>
+                        <tr class="hover">
+                            <td><%= no++ %></td> 
+                            <td><%= eval.nama %></td>
+                            <td><%= formatFloat(eval.nilai * eval.bobot, pelamar.total_bobot) %></td>
+                        </tr>
+        			<%	} %>
+                    <tr>
+                        <th colspan="2">Total Nilai</th>
+                        <td><%= formatFloat(pelamar.total_nilai, 1) %></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <% } -%>
+</body>
+</html>

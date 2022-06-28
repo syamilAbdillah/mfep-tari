@@ -1,0 +1,57 @@
+<%- include('../partials/dashboard-open', {title: 'kandidat | sistem penerimaan pegawai'}) %>
+
+<div class="mockup-window bg-base-100">
+	<div class="p-4 bg-base-100">
+
+		<div class="flex justify-between items-center">
+			<a href="/dashboard-admin/kandidat/new" class="btn btn-secondary mb-4">Tambah data</a>
+			<a href="/dashboard-admin/kandidat/laporan" class="btn btn-secondary mb-4">Cetak Laporan</a>	
+		</div>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>Nama Lengkap</th>
+	                    <th>Username</th>
+	                    <th>No. Telpon</th>
+	                    <th>Email</th>
+	                    <th>CV</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <%
+	                	let no = 1
+
+	                	for(kandidat of data) {
+	                %>
+                        <tr class="hover">
+                            <th><%= no++ %></th> 
+                            <td><%= kandidat.nama %></td>
+                            <td><%= kandidat.username %></td>
+                            <td><%= kandidat.telpon %></td>
+                            <td><%= kandidat.email %></td>
+                            <td>
+                                <a href="<%= kandidat.cv %>" class="btn btn-secondary mr-2">Unduh</a>
+                            </td>
+                            <td>
+                            	<a href="/dashboard-admin/kandidat/edit/<%= kandidat.id %>" class="btn btn-warning">
+                            		ubah
+                            	</a>
+                            	<form method="post" action="/dashboard-admin/kandidat/delete/<%= kandidat.id %>" class="inline">
+	                            	<input type="hidden" name="_method" value="DELETE">
+	                            	<button class="btn btn-error" type="submit">
+	                            		hapus
+	                            	</button>
+                            	</form>
+                            </td>
+                        </tr>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+</div>
+<%- include('../partials/dashboard-close', {active: 'kandidat'}) %>

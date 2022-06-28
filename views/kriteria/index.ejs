@@ -1,0 +1,51 @@
+<%- include('../partials/dashboard-open', {title: 'kriteria | sistem penerimaan pegawai'}) %>
+
+<% for(d of data) { %>
+	<div class="p-4 bg-base-100 rounded-lg mb-8">
+
+		<div class="flex items-center justify-between mb-4">
+			<h1 class="text-xl font-thin font-mono">
+				Posisi : <span class="font-bold font-sans"><%= d.nama %></span>
+			</h1>
+			<a href="/dashboard-admin/kriteria/new?posisi=<%= d.id %>" class="btn btn-secondary">tambah kriteria</a>
+		</div>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>nama kriteria</th>
+	                    <th colspan="3">bobot</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <%
+	                	let no = 1
+
+	                	for(kriteria of d.listKriteria) {
+	                %>
+                        <tr class="hover">
+                            <th><%= no++ %></th> 
+                            <td><%= kriteria.nama %></td>
+                            <td><%= kriteria.bobot %>/<%= d.total_bobot %></td>
+                            <td>-></td>
+                            <td><%= Math.round((kriteria.bobot * 100) / d.total_bobot) / 100 %></td>
+                            <td>
+                                <a href="/dashboard-admin/kriteria/edit/<%= kriteria.id %>" class="btn btn-warning mr-2">ubah</a>
+                                <form  class="inline" action="/dashboard-admin/kriteria/delete/<%= kriteria.id %>" method="post">
+                                	<input type="hidden" name="_method" value="DELETE">
+	                                <button type="submit" class="btn btn-error mr-2">hapus</button>
+                                </form>
+                                
+                            </td>
+                        </tr>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+<% } %>
+
+<%- include('../partials/dashboard-close', {active: 'kriteria'}) %>

@@ -1,0 +1,51 @@
+<%- include('partials/public-open', { title: 'register | sistem penerimaan pegawai' }) %>
+
+<div class="h-full flex justify-center">
+	<form method="post" enctype="multipart/form-data">
+		<div class="grid lg:grid-cols-2 lg:gap-4 py-12 mt-8 px-4 bg-base-100 rounded">
+			<div class="w-96">
+				<div class="form-control w-full mb-12">
+					<label for="username" class="label">Username</label>
+					<input required id="username" type="text" class="input input-bordered" name="username">
+				</div>
+
+
+				<div class="form-control w-full mb-12">
+					<label for="password" class="label">Password</label>
+					<input required id="password" type="password" class="input input-bordered" name="password">
+				</div>
+
+				<div class="form-control w-full mb-12">
+					<label for="confirm-password" class="label">Konfirmasi Password</label>
+					<input required id="confirm-password" type="password" class="input input-bordered" name="confirm">
+				</div>
+			</div>
+			<div class="w-96">
+				<div class="form-control w-full mb-12">
+					<label for="nama" class="label">Nama Lengkap</label>
+					<input required id="nama" type="text" class="input input-bordered" name="nama">
+				</div>
+				<div class="form-control w-full mb-12">
+					<label for="telpon" class="label">No Telepon</label>
+					<input required id="telpon" type="text" class="input input-bordered" name="telpon">
+				</div>
+
+				<div class="form-control w-full mb-12">
+					<label for="email" class="label">Email</label>
+					<input required id="email" type="email" class="input input-bordered" name="email">
+				</div>
+
+			</div>
+			<div class="form-control w-full mb-12 lg:col-span-2">
+				<label for="cv" class="label">CV</label>
+				<input required id="cv" type="file" class="input input-bordered" name="cv">
+			</div>
+			<div class="w-full lg:col-span-2">
+				<button class="btn btn-primary">register</button>
+			</div>	
+		</div>
+	</form>
+</div>
+
+
+<%- include('partials/public-close') %>

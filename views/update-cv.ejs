@@ -1,0 +1,16 @@
+<%- include('partials/public-open', { title: 'update cv | sistem penerimaan pegawai' }) %>
+
+<div class="h-full flex justify-center items-center">
+	<div class="w-96 py-12 mt-8 px-4 rounded bg-base-100">
+		<form method="post" enctype="multipart/form-data">
+			<div class="form-control w-full mb-12">
+				<label for="cv" class="label">CV Baru</label>
+				<input id="cv" type="file" class="input input-bordered" name="cv" required>
+			</div>
+			<button class="btn btn-primary" type="submit">update</button>
+		</form>
+	</div>
+</div>
+
+
+<%- include('partials/public-close') %>

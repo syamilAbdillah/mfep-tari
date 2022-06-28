@@ -1,0 +1,98 @@
+<%- include('partials/public-open', {title: 'sistem penerimaan pegawai'}) %>
+
+<div class="mt-6 p-4 grid lg:grid-cols-3 gap-4">
+	<div class="bg-white rounded-lg shadow card p-4 grid gap-4">
+		<a href="<%= kandidat.cv %>" class="btn">download cv</a>
+		<a href="/update-cv" class="btn">update cv</a>
+		<a href="/reset-password" class="btn btn-warning">reset password</a>
+		<form action="/logout" method="get" class="">
+			<button class="btn btn-error btn-block" type="submit">logout</button>
+		</form>
+	</div>
+	<div class="bg-white rounded-lg shadow card px-4 py-6 lg:col-span-2">
+		<h3 class="text-xl mb-4 font-thin font-mono text-center">Riwayat Lamaran Kandidat</h3>
+		<div class="overflow-x-auto border rounded-lg">
+			<table class="table w-full">
+				<thead>
+					<tr>
+						<th>no.</th>
+						<th>nama posisi</th>
+						<th>tanggal dibuat</th>
+						<th>tanggal ditutup</th>
+						<th>status</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% if(listLamaran.length < 1) { -%>
+						<tr>
+							<td colspan="5" class="text-center bg-base-100">
+								<span class="text-base-300">Tidak Ada</span>
+							</td>
+						</tr>
+					<% } else { -%>
+						<% let i = 1 %>
+						<% for (let i = 0; i < listLamaran.length; i++) { -%>
+							<tr>
+								<th><%= i + 1 %></th>
+								<td><%= listLamaran[i].nama %></td>
+								<td>
+									<span class="badge">
+										<%= formatDate(listLamaran[i].tanggal) %>
+									</span>
+								</td>
+								<td>
+									<span class="badge">
+										<%= formatDate(listLamaran[i].ditutup) %>
+									</span>
+								</td>
+								<td>
+									<% if(listLamaran[i].status == status.DITERIMA) { -%>
+										<span class="badge badge-lg badge-primary">
+											<%= status.DITERIMA %>
+										</span>
+									<% } else if(new Date(listLamaran[i].ditutup).getTime() <= Date.now()) { -%>
+										<span class="badge badge-lg badge-error">
+											<%= status.DITOLAK %>
+										</span>
+									<% } else if(listLamaran[i].kuota == listLamaran[i].total_diterima) { -%>
+										<span class="badge badge-lg badge-error">
+											<%= status.DITOLAK %>
+										</span>
+									<% } else { -%>
+										<span class="badge badge-lg badge-secondary">
+											<%= status.MENUNGGU %>
+										</span>
+									<% } -%>
+								</td>
+							</tr>
+						<% } -%>
+					<% } -%>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="bg-white rounded-lg shadow card px-4 py-6 lg:col-span-3">
+		<div>
+			<a href="/profile/update" class="btn btn-warning">edit profile</a>
+		</div>
+		<table class="table">
+			<tr>
+				<td>Nama Lengkap</td>
+				<td>:</td>
+				<td><%= kandidat.nama %></td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>:</td>
+				<td><%= kandidat.email %></td>
+			</tr>
+			<tr>
+				<td>No Telepon</td>
+				<td>:</td>
+				<td><%= kandidat.telpon %></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<%- include('partials/public-close') %>

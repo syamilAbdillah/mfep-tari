@@ -1,0 +1,79 @@
+<%- include('../partials/dashboard-open', {title: 'loker | sistem penerimaan pegawai'}) %>
+
+<div class="mockup-window bg-base-100 mb-8">
+	<div class="p-4 bg-base-100">
+
+		<h1 class="mb-4 font-thin font-mono"><span class="text-error">**</span>Posisi Yang <span class="font-bold font-sans text-error">Tidak</span> Sedang Sembuka Lowongan</h1>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>nama posisi</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <%
+	                	let no = 1
+
+	                	for(let posisi of data) {
+	                %>
+
+	                	<% if(!posisi.ditutup) { %>
+	                        <tr class="hover">
+	                            <th><%= no++ %></th> 
+	                            <td><%= posisi.nama %></td>
+	                            <td>
+	                                <a href="/dashboard-admin/loker/new?posisi=<%= posisi.id %>" class="btn btn-primary mr-2">buka lowongan</a>
+	                                <a href="/dashboard-admin/loker/posisi/<%= posisi.id %>" class="btn btn-secondary mr-2">riwayat</a>
+	                                
+	                            </td>
+	                        </tr>
+	                	<% } %>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+</div>
+
+
+<div class="mockup-window bg-base-100">
+	<div class="p-4 bg-base-100">
+
+		<h1 class="mb-4 font-thin font-mono"><span class="text-error">**</span>Posisi Yang Sedang Membuka Lowongan</h1>
+
+		<div class="overflow-x-auto border rounded-lg">
+	        <table class="table w-full">
+	            <thead>
+	                <tr>
+	                    <th>#</th>
+	                    <th>nama posisi</th>
+	                    <th>ditutup</th>
+	                    <th>...</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	            	<% no = 1 %>
+	                <% for(let i = 0; i < data.length; i++) { %>
+	                	<% if(data[i].ditutup) { %>
+	                        <tr class="hover">
+	                            <th><%= no ++ %></th> 
+	                            <td><%= data[i].nama %></td>
+	                            <td><%= formatDate(data[i].ditutup) %></td>
+	                            <td>
+	                                <a href="/dashboard-admin/loker/<%= data[i].loker_id %>" class="btn btn-info mr-2">detil</a>
+	                                <a href="/dashboard-admin/loker/posisi/<%= data[i].id %>" class="btn btn-secondary mr-2">riwayat</a>
+	                                
+	                            </td>
+	                        </tr>
+	                	<% } %>
+					<%	} %>
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+</div>
+<%- include('../partials/dashboard-close', {active: 'loker'}) %>

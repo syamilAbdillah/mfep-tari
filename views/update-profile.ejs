@@ -1,0 +1,24 @@
+<%- include('partials/public-open', { title: 'update profile | sistem penerimaan pegawai' }) %>
+
+<div class="h-full flex justify-center items-center">
+	<div class="w-96 py-12 mt-8 px-4 rounded bg-base-100">
+		<form method="post">
+			<div class="form-control w-full mb-12">
+				<label for="nama" class="label">Nama Lengkap</label>
+				<input id="nama" type="text" class="input input-bordered" name="nama" value="<%= data.nama %>" required>
+			</div>
+			<div class="form-control w-full mb-12">
+				<label for="email" class="label">Email</label>
+				<input id="email" type="email" class="input input-bordered" name="email" value="<%= data.email %>" required>
+			</div>
+			<div class="form-control w-full mb-12">
+				<label for="telpon" class="label">No. Telpon</label>
+				<input id="telpon" type="text" class="input input-bordered" name="telpon" value="<%= data.telpon %>" required>
+			</div>
+			<button class="btn btn-primary" type="submit">update</button>
+		</form>
+	</div>
+</div>
+
+
+<%- include('partials/public-close') %>

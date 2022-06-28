@@ -1,0 +1,23 @@
+<%- include('header') %>
+<div class="drawer drawer-mobile">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+    <div class="drawer-content">
+        <div class="fixed top-0 inset-x-0 z-50 glass py-2 px-6 flex justify-between items-center">
+            <div>
+                <label for="my-drawer-2" class="btn btn-ghost drawer-button lg:hidden">
+                    <i class="ph-list-bold mr-2"></i>
+                    menu
+                </label>
+            </div>
+        </div>
+        <div class="container mx-auto py-20 px-4">
+            <% if (locals.error) { -%>
+                <div class="alert alert-error mb-8">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span><%= locals.error %></span>
+                    </div>
+                </div>    
+            <% } -%>
+            <!-- Page content here -->
+            
