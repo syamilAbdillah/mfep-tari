@@ -1,5 +1,5 @@
 node_modules/
-sipp_mfep.sql
+*.sql
 mfep_tari.drawio
 public/uploads/
 .env
