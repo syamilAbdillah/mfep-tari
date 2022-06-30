@@ -1,23 +1,66 @@
 <%- include('../partials/dashboard-open', {title: 'kriteria | sistem penerimaan pegawai'}) %>
 
 <div class="mockup-window bg-base-100">
-	<div class="p-4 bg-base-100">
+	<div class="p-4 bg-base-100" x-data="{
+		nama: '<%= kriteria.nama %>',
+		bobot: <%= kriteria.bobot %>,
+		errors: {
+			nama: null,
+			bobot: null,
+		},
+		validate() {
+			this.nama = this.nama.trim()
+			this.errors.nama = this.nama.length < 1 ? 'nama tidak boleh kosong': null
+			this.errors.bobot = this.bobot < 1 ? 'nilai bobot harus lebih dari 0': null
+
+			return !this.errors.nama && !this.errors.bobot
+		}
+	}">
 		<a href="/dashboard-admin/kriteria" class="btn btn-ghost mb-4 text-secondary">
 			<i class="ph-arrow-fat-left mr-2"></i>
 			kembali
 		</a>
 
-		<form method="post">
+		<form method="post" x-on:submit.prevent="validate() && $el.submit()">
 			<div class="form-control w-full mb-12">
 				<label for="nama" class="label">Nama Kriteria</label>
-				<input id="nama" type="text" class="input input-bordered" name="nama" value="<%= kriteria.nama %>">
+				<input 
+					id="nama" 
+					type="text" 
+					class="input input-bordered" 
+					name="nama"
+					required
+					x-model="nama"
+					x-on:focusout="nama = nama.trim()"
+					x-bind:class="errors.nama ? 'input-error':''"
+				>
+				<p 
+					class="label-alt mt-2 text-error"
+					x-show="errors.nama"
+					x-text="errors.nama"
+				></p>
 			</div>
 			
 
 			<div class="form-control w-full mb-12">
 				<label for="bobot" class="label">Bobot</label>
-				<input id="bobot" type="number" class="input input-bordered" name="bobot" value="<%= kriteria.bobot %>">
+				<input 
+					id="bobot" 
+					type="number" 
+					class="input input-bordered" 
+					name="bobot"
+					required
+					x-model.number="bobot"
+					x-bind:class="errors.bobot ? 'input-error':''"
+				>
+				<p 
+					class="label-alt mt-2 text-error"
+					x-show="errors.bobot"
+					x-text="errors.bobot"
+				></p>
 			</div>
+
+
 
 			<button class="btn btn-primary">
 				<i class="ph-floppy-disk mr-2 text-xl"></i>

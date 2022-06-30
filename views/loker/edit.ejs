@@ -1,13 +1,36 @@
 <%- include('../partials/dashboard-open', {title: 'loker | sistem penerimaan pegawai'}) %>
 
-<div class="mockup-window bg-base-100" x-data="{ nilai: <%= data.kuota %> }">
-	<div class="p-4 bg-base-100">
+<%
+	let _ditutup = formatDate(data.ditutup, '-') 
+%>
+<div class="mockup-window bg-base-100">
+	<div class="p-4 bg-base-100" x-data="{
+		kuota: <%= data.kuota %>,
+		ditutup: '<%= _ditutup %>',
+		errors: { ditutup: null, kuota: null },
+		validate() {
+			this.errors.kuota = this.kuota < 1 ?
+				'minimal kuota penerimaan adalah 1':
+				null;
+
+			this.errors.ditutup = this.ditutup == '' ?
+				'tanggal ditutupnya loker tidak boleh kosong':
+				null;
+
+			let temp = new Date(this.ditutup)
+			this.errors.ditutup = !this.errors.ditutup && temp.valueOf() != temp.valueOf() ?
+				'format tanggal tidak valid, valid format adalah yyy-mm-dd':
+				null;
+
+			return !this.errors.kuota && !this.errors.ditutup
+		}
+	}">
 		<a href="/dashboard-admin/loker/posisi/<%= data.posisi_id %>" class="btn btn-ghost mb-4 text-secondary">
 			<i class="ph-arrow-fat-left mr-2"></i>
 			kembali
 		</a>
 
-		<form method="post">
+		<form method="post" x-on:submit.prevent="validate() && $el.submit()">
 			<input type="hidden" name="posisi_id" value="<%= data.posisi_id %>">
 
 			<div class="form-control w-full mb-12">
@@ -18,16 +41,47 @@
 
 			<div class="form-control w-full mb-12">
 				<label class="label">Tanggal Ditutup</label>
-				<input name="ditutup" type="date" class="input input-bordered" value="<%= formatDate(data.ditutup, "-") %>">
+				<input 
+					id="ditutup" 
+					type="date" 
+					class="input input-bordered" 
+					name="ditutup"
+					value="<%= _ditutup %>"
+					required
+					x-model="ditutup"
+					x-bind:class="errors.ditutup ? 'input-error': ''"
+					x-on:input="errors.ditutup && validate()"
+				>
+				<p 
+					class="label-alt text-error mt-2"
+					x-show="errors.ditutup"
+					x-text="errors.ditutup"
+				></p>
 			</div>
 			
 			<div class="form-control w-full mb-12">
 				<label for="nilai" class="label">Nilai</label>
-				<input id="nilai" x-model="nilai" type="number" value="<%= data.kuota %>" min="0" class="input input-bordered" name="kuota" required>
-				<p class="label-alt" x-show="nilai < 1"><span class="text-error">**</span>kuota diterimanya pelamar harus lebih dari 0 !!</p>
+<!-- 				<input id="nilai" x-model="nilai" type="number"  min="0" class="input input-bordered" name="kuota" required> -->
+<!-- 				<p class="label-alt" x-show="nilai < 1"><span class="text-error">**</span>kuota diterimanya pelamar harus lebih dari 0 !!</p> -->
+				<input 
+					id="kuota" 
+					type="number" 
+					class="input input-bordered" 
+					name="kuota"
+					value="<%= data.kuota %>"
+					required
+					x-model.number="kuota"
+					x-bind:class="errors.kuota ? 'input-error': ''"
+					x-on:input="errors.kuota && validate()"
+				>
+				<p 
+					class="label-alt text-error mt-2"
+					x-show="errors.kuota"
+					x-text="errors.kuota"
+				></p>
 			</div>
 	
-			<button type="submit" class="btn btn-primary" x-show="nilai >= 0">
+			<button type="submit" class="btn btn-primary">
 				<i class="ph-floppy-disk mr-2 text-xl"></i>
 				simpan
 			</button>

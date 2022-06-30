@@ -7,10 +7,11 @@
 			kembali
 		</a>
 
-		<form method="post">
+		<form method="post" x-data="{ nama: '', initNama: false }">
 			<div class="form-control w-full mb-12">
 				<label for="input-posisi" class="label">Nama Posisi</label>
-				<input id="input-posisi" type="text" class="input input-bordered" name="nama">
+				<input id="input-posisi" type="text" class="input input-bordered" x-model="nama" x-on:input="initNama = true" name="nama" required>
+				<p class="label-alt text-error" x-show="nama.trim().length < 1 && initNama">nama tidak boleh kosong</p>
 			</div>
 			
 			<button class="btn btn-primary">

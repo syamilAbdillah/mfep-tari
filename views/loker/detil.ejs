@@ -8,7 +8,7 @@
 			kembali
 		</a>
 		<span class="badge">Total Diterima: <%= totalDiterima %>/<%= kuota %></span>
-		<a href="/dashboard-admin/loker/<%= loker_id %>/laporan" class="btn btn-secondary">Cetak Laporan</a>
+		<a href="/dashboard-admin/loker/<%= loker_id %>/laporan" class="btn btn-secondary" download="laporan.pdf">Cetak Laporan</a>
 	</div>
 </div>
 
@@ -79,7 +79,7 @@
 			<% } -%>
 		</div>
 		<div class="flex justify-between items-center">
-			<a href="<%= pelamar.cv %>" class="btn btn-secondary">cv pelamar</a>
+			<a href="<%= pelamar.cv %>" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">cv pelamar</a>
 			<% if (pelamar.is_completed) { -%>
 				<form method="post">
 					<input type="hidden" name="kandidat_id" value="<%= pelamar.id %>">

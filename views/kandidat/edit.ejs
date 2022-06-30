@@ -24,30 +24,182 @@
 		</a>
 	</div>
 
-	<div class="p-4 bg-base-100">
+	<div class="p-4 bg-base-100" x-data="{
+		username: '<%= data.username %>',
+		password: '',
+		confirm: '',
+		nama: '<%= data.nama %>',
+		telpon: '<%= data.telpon %>',
+		email: '<%= data.email %>',
+		errors: {
+			username: null,
+			password: null,
+			confirm: null,
+			nama: null,
+			telpon: null,
+			email: null,
+		},
+		validateProfile() {
+			this._validateEmail() 
+			this._validateTelpon() 
+			this._validateUsername()
+			this._validateNama()
+
+			return (
+				!this.errors.email &&
+				!this.errors.telpon &&
+				!this.errors.username &&
+				!this.errors.nama
+			) 
+		},
+		validateReset() {
+			this._validatePassword()
+			this._validateConfirm()
+
+			return !this.errors.password && !this.errors.confirm
+		},
+		_validateEmail() {
+			this.email = this.email.trim()
+
+			if(!window.__regexEmail(this.email)) {
+				this.errors.email = 'format email tidak valid'
+			} else {
+				this.errors.email = null
+			}
+		},
+		_validateTelpon() {
+			this.telpon = this.telpon.trim()
+			if(!window.__regexTelpon(this.telpon)) {
+				this.errors.telpon = 'format telpon tidak valid'
+			} else {
+				this.errors.telpon = null
+			}
+		},
+		_validateUsername() {
+			this.username = this.username.trim()
+
+			if(this.username.length < 4) {
+				this.errors.username = 'Username Minimal Memiliki 4 Karakter'
+			} else if (this.username.length > 255) {
+				this.errors.username = 'Username Maksimal Memiliki 255 Karakter'
+
+			} else {
+				this.errors.username = null
+			}
+		},
+		_validatePassword() {
+			if(this.password.length < 4) {
+				this.errors.password = 'Password Minimal Memiliki 4 Karakter'
+			} else if(this.password.length > 16) {
+				this.errors.password = 'Password Maksimal Memiliki 16 Karakter'
+			} else {
+				this.errors.password = null
+			}
+		},
+		_validateConfirm() {
+			if(this.password != this.confirm) {
+				this.errors.confirm = 'Password Tidak Cocok Dengan Konfirmasi Password'
+			} else {
+				this.errors.confirm = null
+			}
+		},
+		_validateNama() {
+			if(this.nama.length < 1) {
+				this.errors.nama = 'Nama Lengkap Tidak Boleh Kosong'
+			} else if(this.nama.length > 255) {
+				this.errors.nama = 'Nama Lengkap Maksimal Memiliki 255 Karakter'
+			} else {
+				this.errors.nama = null
+			}
+		}
+	}">
 		<a href="/dashboard-admin/kandidat" class="btn btn-ghost mb-4 text-secondary">
 			<i class="ph-arrow-fat-left mr-2"></i>
 			kembali
 		</a>
 
-		<form method="post" x-show="tab == 'profile'">
+		<form method="post" x-show="tab == 'profile'" x-on:submit.prevent="validateProfile() && $el.submit()">
 			<div class="form-control w-full mb-12">
 				<label for="username" class="label">Username</label>
-				<input required id="username" value="<%= data.username %>" type="text" class="input input-bordered" name="username">
+				<input 
+					required 
+					id="username" 
+					value="<%= data.username %>" 
+					type="text" 
+					class="input input-bordered" 
+					name="username"
+					x-model="username"
+					x-bind:class="errors.username ? 'input-error':''"
+					x-on:input="errors.username && _validateUsername()"
+					x-on:focusout="username = username.trim()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.username"
+					x-text="errors.username"
+				></p>
 			</div>
 
 			<div class="form-control w-full mb-12">
 				<label for="nama" class="label">Nama Lengkap</label>
-				<input required id="nama" value="<%= data.nama %>" type="text" class="input input-bordered" name="nama">
+				<input 
+					required 
+					id="nama" 
+					value="<%= data.nama %>" 
+					type="text" 
+					class="input input-bordered" 
+					name="nama"
+					x-model="nama"
+					x-bind:class="errors.nama ? 'input-error':''"
+					x-on:input="errors.nama && _validateNama()"
+					x-on:focusout="nama = nama.trim()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.nama"
+					x-text="errors.nama"
+				></p>
 			</div>
 			<div class="form-control w-full mb-12">
 				<label for="telpon" class="label">No Telepon</label>
-				<input required id="telpon" value="<%= data.telpon %>" type="text" class="input input-bordered" name="telpon">
+				<input 
+					required 
+					id="telpon" 
+					value="<%= data.telpon %>" 
+					type="text" 
+					class="input input-bordered" 
+					name="telpon"
+					x-model="telpon"
+					x-bind:class="errors.telpon ? 'input-error':''"
+					x-on:input="errors.telpon && _validateTelpon()"
+					x-on:focusout="telpon = telpon.trim()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.telpon"
+					x-text="errors.telpon"
+				></p>
 			</div>
 
 			<div class="form-control w-full mb-12">
 				<label for="email" class="label">Email</label>
-				<input required id="email" value="<%= data.email %>" type="email" class="input input-bordered" name="email">
+				<input 
+					required 
+					id="email" 
+					value="<%= data.email %>" 
+					type="email" 
+					class="input input-bordered" 
+					name="email"
+					x-model="email"
+					x-bind:class="errors.email ? 'input-error':''"
+					x-on:input="errors.email && _validateEmail()"
+					x-on:focusout="email = email.trim()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.email"
+					x-text="errors.email"
+				></p>
 			</div>			
 			<button class="btn btn-primary">
 				<i class="ph-floppy-disk mr-2 text-xl"></i>
@@ -55,19 +207,45 @@
 			</button>
 		</form>
 
-		<form method="post" action="/dashboard-admin/kandidat/edit/<%= data.id %>/reset-password" x-show="tab == 'password'" x-data="{ password: '', confirm: '',  initPassword: true, initConfirm: true }">
+		<form method="post" action="/dashboard-admin/kandidat/edit/<%= data.id %>/reset-password" x-show="tab == 'password'" x-on:submit.prevent="validateReset() && $el.submit()">
 			<div class="form-control w-full mb-12">
 				<label for="password" class="label">Password</label>
-				<input required id="password" x-on:input="initPassword = false" x-model="password" type="password" class="input input-bordered" name="password">
-				<p class="label-alt text-error" x-show="!initPassword && password.length < 4">Panjang Minimal Password 4 Karakter</p>
+				<input 
+					required 
+					id="password" 
+					type="password" 
+					class="input input-bordered" 
+					name="password"
+					x-model="password"
+					x-bind:class="errors.password ? 'input-error':''"
+					x-on:input="errors.password && _validatePassword()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.password"
+					x-text="errors.password"
+				></p>
 			</div>
 
 			<div class="form-control w-full mb-12">
 				<label for="confirm-password" class="label">Konfirmasi Password</label>
-				<input required id="confirm-password" x-on:input="initConfirm = false" x-model="confirm"  type="password" class="input input-bordered" name="confirm">
-				<p class="label-alt text-error" x-show="!initConfirm && confirm != password">Konfirmasi Password Tidak Sama Dengan Password</p>
+				<input 
+					required 
+					id="confirm-password" 
+					type="password" 
+					class="input input-bordered" 
+					name="confirm"
+					x-model="confirm"
+					x-bind:class="errors.confirm ? 'input-error':''"
+					x-on:input="errors.confirm && _validateConfirm()"
+				>
+				<p 
+					class="label label-alt text-error"
+					x-show="errors.confirm"
+					x-text="errors.confirm"
+				></p>
 			</div>			
-			<button x-show="password == confirm && password.length > 3" class="btn btn-primary">
+			<button  class="btn btn-primary">
 				<i class="ph-floppy-disk mr-2 text-xl"></i>
 				reset password
 			</button>			
@@ -85,4 +263,17 @@
 		</form>
 	</div>
 </div>
+
+<script>
+	window.__regexEmail = function(str) {
+		const regex = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+		return regex.test(str)
+	}
+
+	window.__regexTelpon = function(str) {
+		const regex = new RegExp(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/)
+		return regex.test(str)
+	}
+</script>
+
 <%- include('../partials/dashboard-close', {active: 'kandidat'}) %>

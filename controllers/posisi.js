@@ -17,6 +17,9 @@ router.get('/new', async (req, res) => {
 })
 
 router.post('/new', async (req, res, next) => {
+	req.body.nama = req.body.nama.trim()
+	if(req.body.nama.length < 1) return next(new Error('field nama tidak boleh kosong'))
+
 	const conn = req.app.get('connection')
 	const [_, err] = await posisi.create(conn, { nama: req.body.nama })
 
@@ -39,6 +42,9 @@ router.get('/edit/:id', async (req, res, next) => {
 })
 
 router.post('/edit/:id', async (req, res, next) => {
+	req.body.nama = req.body.nama.trim()
+	if(req.body.nama.length < 1) return next(new Error('field nama tidak boleh kosong'))
+		
 	const conn = req.app.get('connection')
 	const [_, err] = await posisi.update(conn, {id: req.params.id, nama: req.body.nama})
 
@@ -49,7 +55,7 @@ router.post('/edit/:id', async (req, res, next) => {
 	res.redirect('/dashboard-admin/posisi')
 })
 
-router.get('/delete/:id', async (req, res, next) => {
+router.post('/delete/:id', async (req, res, next) => {
 	const conn = req.app.get('connection')
 	const [_, err] = await posisi.remove(conn, req.params.id)
 

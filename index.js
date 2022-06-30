@@ -45,7 +45,9 @@ async function main(){
 	    app.use('/', controllers)
 
 		app.use((err, req, res, next) => {
-			console.log({err})
+			if(!process.env.NODE_ENV) {
+				console.log({err})
+			} 
 			res.cookie('error-message', err.message, {httpOnly: true})
 			res.redirect(req.originalUrl)
 		})

@@ -9,6 +9,16 @@
                     menu
                 </label>
             </div>
+            <a href="/" class="font-thin text-xl hover:pointer-cursor  hover:text-secondary">
+                PT. EKA BOGA PRATAMA
+            </a>
+            <form class="inline" action="/logout" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="btn btn-ghost text-error">
+                    <i class="ph-sign-out-bold mr-2"></i>
+                    logout
+                </button>
+            </form>
         </div>
         <div class="container mx-auto py-20 px-4">
             <% if (locals.error) { -%>

@@ -9,7 +9,7 @@
 	                <tr>
 	                    <th>#</th>
 	                    <th>username</th>
-	                    <th>action</th>
+	                    <th>...</th>
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -22,8 +22,11 @@
                             <th><%= no++ %></th>  
                             <td><%= admin.username %></td>
                             <td>
-                                <a href="/dashboard-admin/admin/edit/<%= admin.id %>" class="btn btn-warning">edit</a>
-                                <a href="/dashboard-admin/admin/delete/<%= admin.id %>" class="btn btn-error">delete</a>
+                                <a href="/dashboard-admin/admin/edit/<%= admin.id %>" class="btn btn-warning">ubah</a>
+                                <form class="inline" method="POST" action="/dashboard-admin/admin/delete/<%= admin.id %>">
+                                	<input type="hidden" value="DELETE" name="_method">
+                                	<button type="submit" class="btn btn-error">hapus</button>
+                                </form>
                             </td>
                         </tr>
 					<%	} %>

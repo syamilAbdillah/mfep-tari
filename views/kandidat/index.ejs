@@ -5,7 +5,7 @@
 
 		<div class="flex justify-between items-center">
 			<a href="/dashboard-admin/kandidat/new" class="btn btn-secondary mb-4">Tambah data</a>
-			<a href="/dashboard-admin/kandidat/laporan" class="btn btn-secondary mb-4">Cetak Laporan</a>	
+			<a href="/dashboard-admin/kandidat/laporan" class="btn btn-secondary mb-4" download="laporan-kandidat.pdf">Cetak Laporan</a>	
 		</div>
 
 		<div class="overflow-x-auto border rounded-lg">
@@ -34,7 +34,7 @@
                             <td><%= kandidat.telpon %></td>
                             <td><%= kandidat.email %></td>
                             <td>
-                                <a href="<%= kandidat.cv %>" class="btn btn-secondary mr-2">Unduh</a>
+                                <a href="<%= kandidat.cv %>" class="btn btn-secondary mr-2" target="_blank" rel="noopener noreferrer">Unduh</a>
                             </td>
                             <td>
                             	<a href="/dashboard-admin/kandidat/edit/<%= kandidat.id %>" class="btn btn-warning">

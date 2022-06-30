@@ -1,27 +1,99 @@
 <%- include('../partials/dashboard-open', {title: 'admin | sistem penerimaan pegawai'}) %>
 
 <div class="mockup-window bg-base-100">
-	<div class="p-4 bg-base-100">
+	<div class="p-4 bg-base-100"
+		 x-data="{
+			form: {
+				username: '<%= data.username %>',
+				password: '',
+				confirm: '',
+			},
+			errors: {
+				username: null,
+				password: null,
+				confirm: null,
+			},
+			validate() {
+				this.errors.username = 
+					this.form.username.trim().length < 4 ? 
+					'minimal 4 karakter':
+					null
+
+				this.errors.password = this.form.password.length < 4 ? 
+					'minimal 4 karakter':
+					null
+
+				this.errors.confirm = this.form.confirm != this.form.password ? 
+					'password anda tidak sama dengan konfirmasi password':
+					null
+
+				return !this.errors.username && !this.errors.password && !this.errors.confirm	
+			},
+		}"
+	>
 		<a href="/dashboard-admin/admin" class="btn btn-ghost mb-4 text-secondary">
 			<i class="ph-arrow-fat-left mr-2"></i>
 			kembali
 		</a>
 
-		<form method="post">
+		<form method="post" x-on:submit.prevent="validate() && $el.submit()">
 			<div class="form-control w-full mb-12">
 				<label for="username" class="label">Username</label>
-				<input id="username" type="text" class="input input-bordered" name="username" value="<%= data.username %>">
+				<input 
+					id="username" 
+					type="text" 
+					class="input input-bordered" 
+					name="username" 
+					value="<%= data.username %>"
+					x-model="form.username" 
+					x-on:input="errors.username && validate()"
+					x-on:focusout="form.username = form.username.trim()"
+					x-bind:class="errors.username ? 'input-error': ''" 
+				>
+				<p 
+					class="label-alt text-error mt-2" 
+					x-show="errors.username" 
+					x-text="errors.username"
+				></p>
 			</div>
 
 
 			<div class="form-control w-full mb-12">
 				<label for="password" class="label">Password Baru</label>
-				<input id="password" type="password" class="input input-bordered" name="password">
+				<input 
+					id="password" 
+					type="password" 
+					class="input input-bordered" 
+					name="password"
+					required  
+					x-model="form.password" 
+					x-on:input="errors.password && validate()"
+					x-bind:class="errors.password ? 'input-error': ''"
+				>
+				<p 
+					class="label-alt text-error mt-2" 
+					x-show="errors.password" 
+					x-text="errors.password"
+				></p>
 			</div>
 
 			<div class="form-control w-full mb-12">
-				<label for="password" class="label">Konfirmasi Password Baru</label>
-				<input id="password" type="password" class="input input-bordered" name="confirm-password">
+				<label for="confirm" class="label">Konfirmasi Password Baru</label>
+				<input 
+					id="confirm" 
+					type="password" 
+					class="input input-bordered" 
+					name="confirm"
+					required  
+					x-model="form.confirm" 
+					x-on:input="errors.confirm && validate()"
+					x-bind:class="errors.confirm ? 'input-error': ''"
+				>
+				<p 
+					class="label-alt text-error mt-2" 
+					x-show="errors.confirm"
+					x-text="errors.confirm"
+				></p>
 			</div>
 
 			<button class="btn btn-primary" type="submit">submit</button>

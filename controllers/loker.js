@@ -44,7 +44,7 @@ router.get('/new', async (req, res, next) => {
 		return next(error)
 	}
 
-	res.render('loker/new', {listPosisi, posisi: req.query.posisi})
+	res.render('loker/new', {listPosisi, posisi: req.query.posisi, formatDate})
 })
 
 router.post('/new', async (req, res, next) => {

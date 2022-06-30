@@ -18,11 +18,19 @@ router.get('/new', async (req, res, next) => {
 })
 
 router.post('/new', async (req, res, next) => {
+	const username = req.body.username.trim()
+	const password = req.body.password
+	const confirm = req.body.confirm
+
+	if(username.length < 4) return next(new Error('username minimal terdiri 4 karakter'))
+	if(password.length < 4) return next(new Error('password minimal terdiri 4 karakter'))
+	if(confirm != password) return next(new Error('password dan konfirmasi password tidak cocok'))
+
 	const conn = req.app.get('connection')
 	const salt = await bcrypt.genSalt(10)
-	const hashed = await bcrypt.hash(req.body.password, salt)
+	const hashed = await bcrypt.hash(password, salt)
 	const [result, err] = await admin.create(conn, {
-		username: req.body.username.trim(),
+		username,
 		password: hashed,
 	})
 
@@ -46,19 +54,19 @@ router.get('/edit/:id', async (req, res, next) => {
 
 router.post('/edit/:id', async (req, res, next) => {
 	const conn = req.app.get('connection')
-	const password = req.body.password.trim()
-	req.body.username = req.body.username.trim()
-	const confirm = req.body['confirm-password']
+	const password = req.body.password
+	const confirm = req.body.confirm
+	const username = req.body.username.trim()
 
 	if(password != confirm) return next(new Error('password dan konfirmasi password tidak cocok'))
 	if(password.length < 4) return next(new Error('password minimal memiliki 4 karakter'))
-	if(req.body.username.length < 4) return next(new Error('username minimal memiliki 4 karakter'))
+	if(username.length < 4) return next(new Error('username minimal memiliki 4 karakter'))
 
 	const salt = await bcrypt.genSalt(10)
 	const hashed = await bcrypt.hash(password, salt)
 	const [_, err] = await admin.update(conn, {
 		id: req.params.id,
-		username: req.body.username,
+		username,
 		password: hashed,
 	})
 
@@ -67,7 +75,7 @@ router.post('/edit/:id', async (req, res, next) => {
 	res.redirect('/dashboard-admin/admin')
 })
 
-router.get('/delete/:id', async (req, res, next) => {
+router.post('/delete/:id', async (req, res, next) => {
 	const conn = req.app.get('connection')
 	const [result, err] = await admin.remove(conn, req.params.id)
 

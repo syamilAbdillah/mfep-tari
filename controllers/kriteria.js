@@ -25,8 +25,15 @@ router.get('/new', async (req, res, next) => {
 })
 
 router.post('/new', async (req, res, next) => {
+	const nama = req.body.nama.trim()
+	const bobot = req.body.bobot
+	const posisi_id = req.body.posisi_id
+
+	if(nama.length < 1) return next(new Error('nama kriteria tidak boleh kosong'))
+	if(bobot < 1) return next(new Error('nilai bobot harus lebis dari 0'))
+
 	const conn = req.app.get('connection')
-	const [_, error] = await kriteria.create(conn, req.body)
+	const [_, error] = await kriteria.create(conn, {nama, bobot, posisi_id})
 
 	if(error) {
 		return next(error)

@@ -1,13 +1,56 @@
 <%- include('../partials/dashboard-open', {title: 'loker | sistem penerimaan pegawai'}) %>
 
+<%
+	let now = formatDate(new Date(Date.now() + (1000 * 60 * 60 * 24)), '-')
+%>
 <div class="mockup-window bg-base-100">
-	<div class="p-4 bg-base-100">
+	<div class="p-4 bg-base-100" x-data="{
+		kuota: 1,
+		ditutup: '<%= now %>',
+		errors: { ditutup: null, kuota: null },
+		validate() {
+			this.errors.kuota = this.kuota < 1 ?
+				'minimal kuota penerimaan adalah 1':
+				null;
+
+			this.errors.ditutup = this.ditutup == '' ?
+				'tanggal ditutupnya loker tidak boleh kosong':
+				null;
+
+			let temp = new Date(this.ditutup)
+			this.errors.ditutup = !this.errors.ditutup && temp.valueOf() != temp.valueOf() ?
+				'format tanggal tidak valid, valid format adalah yyy-mm-dd':
+				null;
+
+			if(!this.errors.ditutup) {
+				let today = new Date()
+				
+				let tahun = today.getFullYear()
+				let bulan = today.getMonth() + 1
+				bulan = bulan < 10 ? '0' + bulan: bulan
+				let tgl = today.getDate()
+				tgl = tgl < 10 ? '0' + tgl: tgl 
+
+				let tomorrow = new Date(tahun + '-' + bulan + '-' + tgl)
+				tomorrow = tomorrow.valueOf() + (1000 * 60 * 60 *24)
+
+				let _ditutup = new Date(this.ditutup).valueOf()
+
+				this.errors.ditutup = _ditutup < tomorrow ? 
+					'tanggal ditutupnya penerimaan, minimal besok':
+					null
+			}
+
+			return !this.errors.kuota && !this.errors.ditutup
+		}
+	}">
+		
 		<a href="/dashboard-admin/loker" class="btn btn-ghost mb-4 text-secondary">
 			<i class="ph-arrow-fat-left mr-2"></i>
 			kembali
 		</a>
 
-		<form method="post">
+		<form method="post" x-on:submit.prevent="validate() && $el.submit()">
 			<div class="form-control w-full mb-12">
 				<label class="label">Posisi</label>
 
@@ -19,7 +62,7 @@
 						<% } %>
 					<% } %>
 				<% } else {%>
-					<select id="input-posisi" class="select input-bordered" name="posisi_id">
+					<select id="input-posisi" class="select input-bordered" name="posisi_id" required>
 					<% for(p of listPosisi) {%>
 						<option value="<%= p.id %>"><%= p.nama %></option>
 					<% } %>
@@ -28,13 +71,41 @@
 			</div>
 			
 			<div class="form-control w-full mb-12">
-				<label for="nama" class="label">Loker Ditutup</label>
-				<input id="nama" type="date" class="input input-bordered" name="ditutup">
+				<label for="ditutup" class="label">Loker Ditutup</label>
+				<input 
+					id="ditutup" 
+					type="date" 
+					class="input input-bordered" 
+					name="ditutup"
+					required
+					x-model="ditutup"
+					x-bind:class="errors.ditutup ? 'input-error': ''"
+					x-on:input="errors.ditutup && validate()"
+				>
+				<p 
+					class="label-alt text-error mt-2"
+					x-show="errors.ditutup"
+					x-text="errors.ditutup"
+				></p>
 			</div>
 			
 			<div class="form-control w-full mb-12">
-				<label for="bobot" class="label">Kuota Diterima</label>
-				<input id="bobot" type="number" class="input input-bordered" name="kuota">
+				<label for="kuota" class="label">Kuota Diterima</label>
+				<input 
+					id="kuota" 
+					type="number" 
+					class="input input-bordered" 
+					name="kuota"
+					required
+					x-model.number="kuota"
+					x-bind:class="errors.kuota ? 'input-error': ''"
+					x-on:input="errors.kuota && validate()"
+				>
+				<p 
+					class="label-alt text-error mt-2"
+					x-show="errors.kuota"
+					x-text="errors.kuota"
+				></p>
 			</div>
 
 			<button class="btn btn-primary">

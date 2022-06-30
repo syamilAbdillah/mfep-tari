@@ -25,7 +25,10 @@
                             <td><%= posisi.nama %></td>
                             <td>
                                 <a href="/dashboard-admin/posisi/edit/<%= posisi.id %>" class="btn btn-warning mr-2">ubah</a>
-                                <a href="/dashboard-admin/posisi/delete/<%= posisi.id %>" class="btn btn-error mr-2">hapus</a>
+                                <form class="inline" action="/dashboard-admin/posisi/delete/<%= posisi.id %>" method="POST">
+                                	<input type="hidden" name="_method" value="DELETE">
+                                	<button class="btn btn-error" type="submit">hapus</button>
+                                </form>
                                 
                             </td>
                         </tr>
