@@ -131,8 +131,10 @@ router.get('/:id', async (req, res, next) => {
 		return next(err || err2 || err3)
 	}
 
+	// PERHITUNGAN NILAI AKHIR
 	setNilaiAkhir(data)
 
+	// PENGURUTAN BERDASARKAN NILAI AKHIR
 	data.sort((a, b) => b.total_nilai - a.total_nilai)
 
 	res.render('loker/detil', {
