@@ -143,7 +143,7 @@ router.post('/reset-password',loginRequired, guard('kandidat'), handleResetPassw
 /*
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 */
-router.get('/update-cv', async (req, res, next) => {
+router.get('/update-cv', loginRequired, guard('kandidat'), async (req, res, next) => {
 	res.render('update-cv')
 })
 
