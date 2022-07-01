@@ -2,7 +2,7 @@
 
 <div class="mt-6 p-4 grid lg:grid-cols-3 gap-4">
 	<div class="bg-white rounded-lg shadow card p-4 grid gap-4">
-		<a href="<%= kandidat.cv %>" class="btn">download cv</a>
+		<a href="<%= kandidat.cv %>" target="_blank" rel="noopener noreferrer" class="btn">download cv</a>
 		<a href="/update-cv" class="btn">update cv</a>
 		<a href="/reset-password" class="btn btn-warning">reset password</a>
 		<form class="inline" action="/logout" method="post">
