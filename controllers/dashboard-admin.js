@@ -22,5 +22,6 @@ router.get('/report/pelamar-terdaftar', (req, res) => {
 
 router.get('/reset-password', (req, res) => res.render('reset-password'))
 router.post('/reset-password', middleware.handleResetPassword)
+router.post('/logout', middleware.logout)
 
 module.exports = router

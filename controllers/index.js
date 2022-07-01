@@ -4,8 +4,6 @@ const dashboardAdmin = require('./dashboard-admin')
 const {loginRequired, guard, logout} = require('./middleware')
 
 router.use('/', public)
-router.use(loginRequired)
-router.use('/dashboard-admin', guard('admin'), dashboardAdmin)
-router.get('/logout', logout)
+router.use('/dashboard-admin', loginRequired, guard('admin'), dashboardAdmin)
 
 module.exports = router

@@ -5,7 +5,8 @@
 		<a href="<%= kandidat.cv %>" class="btn">download cv</a>
 		<a href="/update-cv" class="btn">update cv</a>
 		<a href="/reset-password" class="btn btn-warning">reset password</a>
-		<form action="/logout" method="get" class="">
+		<form class="inline" action="/logout" method="post">
+			<input type="hidden" name="_method" value="DELETE">
 			<button class="btn btn-error btn-block" type="submit">logout</button>
 		</form>
 	</div>

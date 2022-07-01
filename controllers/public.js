@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const formatDate = require('../utils/formatDate')
 const upload = require('./upload')
 const uploadFile = require('../utils/uploadFile')
-const { guard, loginRequired, handleResetPassword } = require('./middleware')
+const { guard, loginRequired, handleResetPassword, logout } = require('./middleware')
 
 const loker = require('../models/loker')
 const akun = require('../models/akun')
@@ -51,6 +51,8 @@ router.post('/login', async (req, res, next) => {
 		res.redirect('/dashboard-admin')
 	}
 })
+
+router.post('/logout', loginRequired, logout)
 /*
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 */ 
